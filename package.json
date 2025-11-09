@@ -1,0 +1,15 @@
+{
+  "name": "chat with chatgpt",
+  "version": "1.0.0",
+  "main": "talk-with-chatgpt.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "puppeteer": "^24.20.0"
+  }
+}
+
