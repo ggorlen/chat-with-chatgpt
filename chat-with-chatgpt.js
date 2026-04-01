@@ -67,7 +67,7 @@ let browser;
         })();
       });
       await new Promise(resolve => setTimeout(resolve, 1_000));
-      return [...document.querySelectorAll("article")].pop().textContent;
+      return [...document.querySelectorAll("section")].pop().textContent;
     }, answer);
     console.log(response);
   }
