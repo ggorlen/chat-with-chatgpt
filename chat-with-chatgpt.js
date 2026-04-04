@@ -46,28 +46,29 @@ let browser;
       document.querySelector("#prompt-textarea p").textContent = input;
       await new Promise(resolve => {
         (function poll() {
-          if (!document.querySelector("#composer-submit-button")) {
-            requestAnimationFrame(poll);
+          if (document.querySelector("#composer-submit-button")) {
+            resolve();
           }
           else {
-            resolve();
+            requestAnimationFrame(poll);
           }
         })();
       });
       const submit = document.querySelector("#composer-submit-button");
+      const oldLength = document.querySelectorAll('[aria-label="Copy response"]').length;
       submit.click();
       await new Promise(resolve => {
         (function poll() {
-          if (submit.isConnected) {
-            requestAnimationFrame(poll);
+          if (document.querySelectorAll('[aria-label="Copy response"]').length > oldLength) {
+            resolve();
           }
           else {
-            resolve();
+            requestAnimationFrame(poll);
           }
         })();
       });
-      await new Promise(resolve => setTimeout(resolve, 1_000));
-      return [...document.querySelectorAll("section")].pop().textContent;
+      await new Promise(resolve => setTimeout(resolve, 1_000)); // hacky but no obvious other predicate
+      return [...document.querySelectorAll("section")].pop()?.querySelector("div").textContent;
     }, answer);
     console.log(response);
   }
