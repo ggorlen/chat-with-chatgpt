@@ -15,3 +15,7 @@ node chat-with-chatgpt
   - https://gemini.google.com/app
   - https://minitoolai.com/grok/
   - etc
+- Prior art (untested/unreferenced):
+  - <https://github.com/rizbud/puppeteer-gpt>
+  - <https://github.com/0xMesto/chatgptAPI_unof>
+  - <https://github.com/Eren-Seyfi/web-chatgpt>
