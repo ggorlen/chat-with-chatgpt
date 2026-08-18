@@ -68,7 +68,9 @@ let browser;
         })();
       });
       await new Promise(resolve => setTimeout(resolve, 1_000)); // hacky but no obvious other predicate
-      return [...document.querySelectorAll("section")].pop()?.querySelector("div").textContent;
+
+      const response = [...document.querySelectorAll('[data-message-author-role="assistant"]')].pop();
+      return response?.textContent;
     }, answer);
     console.log(response);
   }
