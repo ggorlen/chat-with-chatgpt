@@ -41,35 +41,41 @@ let browser;
   for (;;) {
     const answer = await new Promise(resolve => rl.question("> ", resolve));
     const response = await page.evaluate(async (input) => {
-      [...document.querySelectorAll("a")]
-        .find(e => e.textContent.includes("Stay logged out"))?.click();
-      document.querySelector("#prompt-textarea p").textContent = input;
-      await new Promise(resolve => {
-        (function poll() {
-          if (document.querySelector("#composer-submit-button")) {
-            resolve();
-          }
-          else {
-            requestAnimationFrame(poll);
-          }
-        })();
-      });
-      const submit = document.querySelector("#composer-submit-button");
-      const oldLength = document.querySelectorAll('[aria-label="Copy response"]').length;
-      submit.click();
-      await new Promise(resolve => {
-        (function poll() {
-          if (document.querySelectorAll('[aria-label="Copy response"]').length > oldLength) {
-            resolve();
-          }
-          else {
-            requestAnimationFrame(poll);
-          }
-        })();
-      });
-      await new Promise(resolve => setTimeout(resolve, 1_000)); // hacky but no obvious other predicate
+      const textarea = document.querySelector("#mobile-composer-prompt");
+      textarea.focus();
+      textarea.value = input;
+      textarea.dispatchEvent(new Event("input", { bubbles: true }));
+      textarea.dispatchEvent(new KeyboardEvent("keydown", {
+        key: "Enter",
+        code: "Enter",
+        keyCode: 13,
+        which: 13,
+        bubbles: true,
+        cancelable: true
+      }));
 
-      const response = [...document.querySelectorAll('[data-message-author-role="assistant"]')].pop();
+      await new Promise(resolve => {
+        (function poll() {
+          if (document.querySelector('[aria-label="Stop generating"]')) {
+            resolve();
+          }
+          else {
+            requestAnimationFrame(poll);
+          }
+        })();
+      });
+      await new Promise(resolve => {
+        (function poll() {
+          if (document.querySelector('[aria-label="Stop generating"]')) {
+            requestAnimationFrame(poll);
+          }
+          else {
+            resolve();
+          }
+        })();
+      });
+
+      const response = [...document.querySelectorAll('[data-assistant-markdown]')].pop();
       return response?.textContent;
     }, answer);
     console.log(response);
