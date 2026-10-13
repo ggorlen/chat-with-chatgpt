@@ -76,7 +76,7 @@ let browser;
       });
 
       const response = [...document.querySelectorAll('[data-assistant-markdown]')].pop();
-      return response?.textContent;
+      return response?.innerText;
     }, answer);
     console.log(response);
   }
